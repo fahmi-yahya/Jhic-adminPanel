@@ -1,0 +1,558 @@
+/* =========================================================
+   admin-modern.css
+   -----------------------------------------------------------
+   Setiap halaman konten (Berita/Jurusan/Lingkungan/Prestasi/
+   Pesan) punya CSS lama sendiri (BeritaPage.css, dst) yang
+   mendefinisikan warna sendiri lewat variabel di :root — beda
+   dari sistem desain Dashboard (.knowvio-root, di index.css).
+
+   File ini di-import PALING TERAKHIR di tiap halaman, jadi buat
+   nama class yang sama, aturan di sini menang. Isinya cuma
+   memetakan ulang semua warna/radius/shadow supaya konsisten
+   dengan Dashboard DAN otomatis ikut dark mode (karena semua
+   pakai var(--...) dari .knowvio-root, bukan warna tetap).
+   ========================================================= */
+
+.knowvio-root .page-modern {
+  color: var(--text-primary);
+}
+
+/* ---------------- PAGE SHELL ---------------- */
+.knowvio-root .page-modern.panel,
+.knowvio-root .berita-container.page-modern {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow-card);
+}
+
+.knowvio-root .page-modern .panel-head h3 {
+  margin: 0 0 3px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+.knowvio-root .page-modern .panel-head p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+.knowvio-root .page-modern .panel-head-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.knowvio-root .page-modern .count-chip {
+  background: var(--orange-soft);
+  color: var(--orange-dark);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 99px;
+}
+
+/* ---------------- BACK LINK ---------------- */
+.knowvio-root .page-modern .link-btn.back-btn {
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.knowvio-root .page-modern .link-btn.back-btn:hover {
+  color: var(--text-primary);
+}
+
+/* ---------------- STAT CARDS ---------------- */
+.knowvio-root .page-modern .stats-grid {
+  margin-bottom: 4px;
+}
+.knowvio-root .page-modern .stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 17px;
+  box-shadow: var(--shadow-card);
+}
+.knowvio-root .page-modern .stat-top {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.knowvio-root .page-modern .stat-top svg {
+  color: var(--orange);
+}
+.knowvio-root .page-modern .stat-value {
+  color: var(--text-primary);
+  font-weight: 800;
+}
+
+/* ---------------- BUTTONS ---------------- */
+.knowvio-root .page-modern .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.knowvio-root .page-modern .btn-primary:hover {
+  opacity: 0.9;
+}
+.knowvio-root .page-modern .btn-primary svg {
+  width: 15px;
+  height: 15px;
+}
+.knowvio-root .page-modern .btn-primary:disabled {
+  background: var(--text-tertiary);
+  color: #ffffff;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.knowvio-root .page-modern .btn-secondary {
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.knowvio-root .page-modern .btn-secondary:hover {
+  background: var(--surface-2);
+}
+
+.knowvio-root .page-modern .btn-outline {
+  background: var(--card-bg);
+  color: #ff4d4f;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+}
+.knowvio-root .page-modern .btn-outline:hover {
+  background: rgba(255, 77, 79, 0.1);
+  border-color: rgba(255, 77, 79, 0.35);
+}
+
+.knowvio-root .page-modern .sq-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  border-radius: 9px;
+}
+.knowvio-root .page-modern .sq-btn:hover {
+  color: var(--text-primary);
+  background: var(--surface);
+}
+.knowvio-root .page-modern .sq-btn-danger,
+.knowvio-root .page-modern .btn-danger-sq {
+  color: #ff4d4f;
+}
+.knowvio-root .page-modern .sq-btn-danger:hover,
+.knowvio-root .page-modern .btn-danger-sq:hover {
+  background: rgba(255, 77, 79, 0.1);
+  border-color: rgba(255, 77, 79, 0.3);
+}
+
+/* ---------------- TOOLBAR / SEARCH / FILTERS ---------------- */
+.knowvio-root .page-modern .toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.knowvio-root .page-modern .search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 0 13px;
+  height: 40px;
+  min-width: 240px;
+  flex: 1 1 240px;
+}
+.knowvio-root .page-modern .search svg {
+  width: 15px;
+  height: 15px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+.knowvio-root .page-modern .search input {
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 13px;
+  color: var(--text-primary);
+  width: 100%;
+}
+.knowvio-root .page-modern .search input::placeholder {
+  color: var(--text-tertiary);
+}
+.knowvio-root .page-modern .filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.knowvio-root .page-modern .filter-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  margin-right: 2px;
+}
+.knowvio-root .page-modern .filter-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 99px;
+}
+.knowvio-root .page-modern .filter-chip:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.knowvio-root .page-modern .filter-chip.active {
+  background: var(--btn-bg);
+  border-color: var(--btn-bg);
+  color: var(--btn-text);
+}
+
+/* ---------------- TABLE ---------------- */
+.knowvio-root .page-modern .table-wrap {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: auto;
+  margin-top: 4px;
+}
+.knowvio-root .page-modern table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.knowvio-root .page-modern thead tr {
+  background: var(--surface);
+}
+.knowvio-root .page-modern th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.knowvio-root .page-modern td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+.knowvio-root .page-modern tbody tr:last-child td {
+  border-bottom: none;
+}
+.knowvio-root .page-modern tbody tr:hover td {
+  background: var(--surface);
+}
+.knowvio-root .page-modern .empty-row-text {
+  text-align: center;
+  color: var(--text-tertiary);
+  padding: 32px 16px;
+}
+.knowvio-root .page-modern .desc-cell {
+  color: var(--text-secondary);
+  max-width: 320px;
+}
+.knowvio-root .page-modern .author-name {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ---------------- USER / AVATAR CELL ---------------- */
+.knowvio-root .page-modern .user-cell {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.knowvio-root .page-modern .user-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.knowvio-root .page-modern .user-email {
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+}
+.knowvio-root .page-modern .avatar {
+  box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 3px var(--border);
+}
+
+/* ---------------- STATUS PILL (dengan dot, ala referensi) ---------------- */
+.knowvio-root .page-modern .status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 99px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.knowvio-root .page-modern .status-pill::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+.knowvio-root .page-modern .status-success {
+  background: var(--green-soft);
+  color: var(--green);
+}
+.knowvio-root .page-modern .status-progress {
+  background: var(--orange-soft);
+  color: var(--orange-dark);
+}
+.knowvio-root .page-modern .status-danger {
+  background: rgba(255, 77, 79, 0.12);
+  color: #ff4d4f;
+}
+.knowvio-root .page-modern .status-neutral {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+}
+
+/* ---------------- PAGINATION ---------------- */
+.knowvio-root .page-modern .pagination-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.knowvio-root .page-modern .pagination-perpage select {
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--text-primary);
+  background: var(--surface);
+}
+.knowvio-root .page-modern .pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.knowvio-root .page-modern .page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.knowvio-root .page-modern .page-btn:hover {
+  background: var(--surface);
+}
+.knowvio-root .page-modern .page-btn.active {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+}
+.knowvio-root .page-modern .page-btn:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+.knowvio-root .page-modern .page-btn:disabled:hover {
+  background: none;
+}
+
+/* ---------------- FORM / MODAL ---------------- */
+.knowvio-root .page-modern .custom-input {
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 10px 13px;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--surface);
+  font-family: inherit;
+}
+.knowvio-root .page-modern .custom-input:focus {
+  outline: none;
+  border-color: var(--orange);
+  background: var(--card-bg);
+}
+.knowvio-root .page-modern .file-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.knowvio-root .page-modern .file-input {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.knowvio-root .page-modern .review-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+.knowvio-root .page-modern .banner-error {
+  background: rgba(255, 77, 79, 0.1);
+  color: #ff4d4f;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 14, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+.modal-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px 24px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-frame);
+  color: var(--text-primary);
+}
+.modal-card .panel-head h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* ---------------- BERITA GRID ---------------- */
+.knowvio-root .page-modern .berita-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 18px;
+}
+.knowvio-root .page-modern .berita-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.knowvio-root .page-modern .berita-thumb {
+  position: relative;
+  height: 150px;
+  background: var(--surface-2);
+}
+.knowvio-root .page-modern .berita-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.knowvio-root .page-modern .berita-thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+}
+.knowvio-root .page-modern .berita-thumb-placeholder svg {
+  width: 28px;
+  height: 28px;
+}
+.knowvio-root .page-modern .berita-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(23, 24, 31, 0.78);
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+.knowvio-root .page-modern .berita-content {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+}
+.knowvio-root .page-modern .berita-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+}
+.knowvio-root .page-modern .berita-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.35;
+}
+.knowvio-root .page-modern .berita-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.knowvio-root .page-modern .berita-footer {
+  margin-top: auto;
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .knowvio-root .page-modern.panel,
+  .knowvio-root .berita-container.page-modern {
+    padding: 16px;
+  }
+  .knowvio-root .page-modern .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .knowvio-root .page-modern .search {
+    width: 100%;
+  }
+}
