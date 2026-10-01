@@ -12,6 +12,7 @@ import PesanPage from "./view/PesanPage";
 import PrestasiPage from "./view/PrestasiPage";
 import LingkunganPage from "./view/LingkunganPage";
 import { User } from "lucide-react";
+import LulusanPage from "./view/DataLulusan";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -30,6 +31,7 @@ function App() {
           <Route path="/pesan" element={<PesanPage />} />
           <Route path="/management" element={<UserManagement/>}/>
           {/* Default Redirect */}
+          <Route path="/data-lulusan" element={<LulusanPage/>}/>
           <Route
             path="/admin"
             element={<Navigate to="/admin/berita" replace />}

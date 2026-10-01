@@ -1,5 +1,3 @@
-
-
 export const API_BASE = "http://localhost:8000/api"; // ganti ke URL production saat deploy
 
 export const APP_BASE = API_BASE.replace(/\/api\/?$/, "");
@@ -37,20 +35,38 @@ export async function ensureCsrfCookie() {
  * fetch wrapper: selalu kirim cookie (credentials: "include"), selalu
  * sertakan header X-XSRF-TOKEN dari cookie yang sudah ada, parse JSON, dan
  * redirect ke halaman login kalau sesi habis/tidak valid (401).
+ *
+ * Kalau options.body berupa FormData (dipakai utk upload file), JANGAN
+ * di-JSON.stringify dan JANGAN pasang Content-Type manual — browser yang
+ * harus menentukan header "multipart/form-data; boundary=..." sendiri
+ * (boundary-nya acak tiap request, kita tidak bisa buat itu manual).
+ * Kalau Content-Type dipaksa "application/json" di sini, Laravel tidak
+ * akan bisa parse $request->file(), dan body-nya sendiri sudah rusak
+ * duluan karena JSON.stringify(FormData) cuma menghasilkan "{}".
  */
 export async function apiFetch(path, options = {}) {
   const xsrfToken = getCookie("XSRF-TOKEN");
+  const isFormData =
+    typeof FormData !== "undefined" && options.body instanceof FormData;
+
+  const headers = {
+    Accept: "application/json",
+    ...(xsrfToken ? { "X-XSRF-TOKEN": xsrfToken } : {}),
+    ...options.headers,
+  };
+  if (!isFormData) {
+    headers["Content-Type"] = "application/json";
+  }
 
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
     credentials: "include", // wajib supaya cookie sesi & XSRF ikut terkirim
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(xsrfToken ? { "X-XSRF-TOKEN": xsrfToken } : {}),
-      ...options.headers,
-    },
-    body: options.body ? JSON.stringify(options.body) : undefined,
+    headers,
+    body: isFormData
+      ? options.body
+      : options.body
+        ? JSON.stringify(options.body)
+        : undefined,
   });
 
   if (res.status === 401) {

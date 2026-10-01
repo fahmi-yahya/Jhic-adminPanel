@@ -221,7 +221,10 @@ export const DEFAULT_NAV_ITEMS = [
     id: "bkk",
     label: "BKK",
     icon: BkkIcon,
-    subItems: [{ label: "Data BKK", path: "/bkk", module: "bkk" }],
+    subItems: [
+      { label: "Data Lulusan", path: "/data-lulusan", module: "bkk" }
+    
+    ],
   },
   {
     id: "spmb",
