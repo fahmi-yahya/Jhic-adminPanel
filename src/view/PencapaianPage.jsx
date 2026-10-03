@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../css/index.css";
 import "../css/admin-modern.css";
-import { apiFetch, APP_BASE } from "../lib/api";
+import { apiFetch, APP_BASE, getCurrentUser, logout } from "../lib/api";
+import Sidebar from "./Sidebar";
 
 const Icon = {
   search: (
@@ -69,6 +70,12 @@ export default function PencapaianPage() {
   const [formError, setFormError] = useState("");
   const [list, setList] = useState([]);
   const [query, setQuery] = useState("");
+  const [theme, setTheme] = useState("light");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   const fetchList = () => {
     setLoading(true);
@@ -82,6 +89,29 @@ export default function PencapaianPage() {
   useEffect(() => {
     fetchList();
   }, []);
+
+  useEffect(() => {
+    getCurrentUser()
+      .then(setCurrentUser)
+      .catch(() => {})
+      .finally(() => setAuthChecked(true));
+  }, []);
+
+  const canView =
+    currentUser?.role === "superadmin" ||
+    !!currentUser?.permissions?.pencapaian?.view;
+  const canEdit =
+    currentUser?.role === "superadmin" ||
+    !!currentUser?.permissions?.pencapaian?.edit;
+  const canDelete =
+    currentUser?.role === "superadmin" ||
+    !!currentUser?.permissions?.pencapaian?.del;
+
+  useEffect(() => {
+    if (authChecked && !canView) {
+      window.location.href = "/index";
+    }
+  }, [authChecked, canView]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -125,217 +155,243 @@ export default function PencapaianPage() {
   }
 
   return (
-    <div className="panel page-modern">
-      <button
-        type="button"
-        className="link-btn back-btn"
-        onClick={() => window.history.back()}
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="m15 18-6-6 6-6" />
-        </svg>
-        Kembali
-      </button>
-
-      {error && (
-        <div className="banner-error" role="alert">
-          {error}
-        </div>
-      )}
-
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-top">
-            {Icon.handshake}
-            <span>Total Kerja Sama</span>
-          </div>
-          <div className="stat-bottom">
-            <div className="stat-value">{list.length}</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="panel-head">
-        <div>
-          <h3>Pencapaian & Kerja Sama</h3>
-          <p>
-            Daftar MOU/kerja sama jurusan dengan mitra (perusahaan, instansi).
-          </p>
-        </div>
-        <div className="panel-head-right">
-          <button className="btn-primary" onClick={() => setShowModal(true)}>
+    <div className="knowvio-root" data-theme={theme}>
+      <Sidebar
+        activeNav="blud"
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={setSidebarCollapsed}
+        userName={currentUser?.name}
+        role={currentUser?.role}
+        permissions={currentUser?.permissions}
+        onLogoutClick={logout}
+      />
+      <main className="main">
+        <div className="panel page-modern">
+          <button
+            type="button"
+            className="link-btn back-btn"
+            onClick={() => window.history.back()}
+          >
             <svg
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2.4"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
+              <path d="m15 18-6-6 6-6" />
             </svg>
-            Tambah Kerja Sama
+            Kembali
           </button>
-        </div>
-      </div>
 
-      <div className="toolbar" style={{ marginTop: "16px" }}>
-        <div className="search">
-          {Icon.search}
-          <input
-            type="text"
-            placeholder="Cari jurusan atau nama mitra..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Mitra</th>
-              <th>Jurusan Terkait</th>
-              <th>Deskripsi</th>
-              <th>Tanggal</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="5" className="empty-row-text">
-                  Memuat data...
-                </td>
-              </tr>
-            ) : filtered.length === 0 ? (
-              <tr>
-                <td colSpan="5" className="empty-row-text">
-                  Belum ada data kerja sama.
-                </td>
-              </tr>
-            ) : (
-              filtered.map((item, idx) => (
-                <tr key={item.id}>
-                  <td>
-                    <div className="user-cell">
-                      {imageUrl(item.logo_mitra) ? (
-                        <img
-                          src={imageUrl(item.logo_mitra)}
-                          alt={item.nama_mitra}
-                          className={`avatar ${AVATAR_CLASSES[idx % AVATAR_CLASSES.length]}`}
-                          style={{ objectFit: "cover" }}
-                        />
-                      ) : (
-                        <div
-                          className={`avatar ${AVATAR_CLASSES[idx % AVATAR_CLASSES.length]}`}
-                        >
-                          {item.nama_mitra?.slice(0, 2).toUpperCase()}
-                        </div>
-                      )}
-                      <span className="user-name">{item.nama_mitra}</span>
-                    </div>
-                  </td>
-                  <td>{item.jurusan_terkait}</td>
-                  <td className="desc-cell">{item.deskripsi}</td>
-                  <td>{formatDate(item.tanggal_kerjasama)}</td>
-                  <td>
-                    <button
-                      className="btn-outline"
-                      onClick={() => handleDelete(item)}
-                    >
-                      Hapus
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {showModal && (
-        <div className="modal-backdrop">
-          <div className="modal-card">
-            <div className="panel-head" style={{ marginBottom: "16px" }}>
-              <h3>Tambah Kerja Sama</h3>
-              <button className="sq-btn" onClick={() => setShowModal(false)}>
-                ✕
-              </button>
+          {error && (
+            <div className="banner-error" role="alert">
+              {error}
             </div>
-            <form onSubmit={handleSubmit}>
-              {formError && (
-                <div className="banner-error" role="alert">
-                  {formError}
-                </div>
-              )}
-              <input
-                type="text"
-                name="jurusan_terkait"
-                placeholder="Jurusan Terkait (mis. RPL)"
-                className="custom-input"
-                required
-              />
-              <input
-                type="text"
-                name="nama_mitra"
-                placeholder="Nama Mitra (mis. UBIG, Kominfo)"
-                className="custom-input"
-                required
-                style={{ marginTop: "10px" }}
-              />
-              <textarea
-                name="deskripsi"
-                placeholder="Deskripsi kerja sama"
-                className="custom-input"
-                rows="4"
-                required
-                style={{ marginTop: "10px" }}
-              />
-              <input
-                type="date"
-                name="tanggal_kerjasama"
-                className="custom-input"
-                style={{ marginTop: "10px" }}
-              />
-              <label className="file-label" style={{ marginTop: "10px" }}>
-                <span>Logo Mitra (opsional):</span>
-                <input
-                  type="file"
-                  name="logo_mitra"
-                  accept="image/*"
-                  className="file-input"
-                />
-              </label>
-              <div className="review-actions" style={{ marginTop: "14px" }}>
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() => setShowModal(false)}
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="btn-primary"
-                  disabled={submitting}
-                >
-                  {submitting ? "Menyimpan..." : "Simpan"}
-                </button>
+          )}
+
+          <div className="stats-grid">
+            <div className="stat-card">
+              <div className="stat-top">
+                {Icon.handshake}
+                <span>Total Kerja Sama</span>
               </div>
-            </form>
+              <div className="stat-bottom">
+                <div className="stat-value">{list.length}</div>
+              </div>
+            </div>
           </div>
+
+          <div className="panel-head">
+            <div>
+              <h3>Pencapaian & Kerja Sama</h3>
+              <p>
+                Daftar MOU/kerja sama jurusan dengan mitra (perusahaan,
+                instansi).
+              </p>
+            </div>
+            <div className="panel-head-right">
+              {canEdit && (
+                <button
+                  className="btn-primary"
+                  onClick={() => setShowModal(true)}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  Tambah Kerja Sama
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="toolbar" style={{ marginTop: "16px" }}>
+            <div className="search">
+              {Icon.search}
+              <input
+                type="text"
+                placeholder="Cari jurusan atau nama mitra..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mitra</th>
+                  <th>Jurusan Terkait</th>
+                  <th>Deskripsi</th>
+                  <th>Tanggal</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan="5" className="empty-row-text">
+                      Memuat data...
+                    </td>
+                  </tr>
+                ) : filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="empty-row-text">
+                      Belum ada data kerja sama.
+                    </td>
+                  </tr>
+                ) : (
+                  filtered.map((item, idx) => (
+                    <tr key={item.id}>
+                      <td>
+                        <div className="user-cell">
+                          {imageUrl(item.logo_mitra) ? (
+                            <img
+                              src={imageUrl(item.logo_mitra)}
+                              alt={item.nama_mitra}
+                              className={`avatar ${AVATAR_CLASSES[idx % AVATAR_CLASSES.length]}`}
+                              style={{ objectFit: "cover" }}
+                            />
+                          ) : (
+                            <div
+                              className={`avatar ${AVATAR_CLASSES[idx % AVATAR_CLASSES.length]}`}
+                            >
+                              {item.nama_mitra?.slice(0, 2).toUpperCase()}
+                            </div>
+                          )}
+                          <span className="user-name">{item.nama_mitra}</span>
+                        </div>
+                      </td>
+                      <td>{item.jurusan_terkait}</td>
+                      <td className="desc-cell">{item.deskripsi}</td>
+                      <td>{formatDate(item.tanggal_kerjasama)}</td>
+                      <td>
+                        {canDelete && (
+                          <button
+                            className="btn-outline"
+                            onClick={() => handleDelete(item)}
+                          >
+                            Hapus
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {showModal && (
+            <div className="modal-backdrop">
+              <div className="modal-card">
+                <div className="panel-head" style={{ marginBottom: "16px" }}>
+                  <h3>Tambah Kerja Sama</h3>
+                  <button
+                    className="sq-btn"
+                    onClick={() => setShowModal(false)}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <form onSubmit={handleSubmit}>
+                  {formError && (
+                    <div className="banner-error" role="alert">
+                      {formError}
+                    </div>
+                  )}
+                  <input
+                    type="text"
+                    name="jurusan_terkait"
+                    placeholder="Jurusan Terkait (mis. RPL)"
+                    className="custom-input"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="nama_mitra"
+                    placeholder="Nama Mitra (mis. UBIG, Kominfo)"
+                    className="custom-input"
+                    required
+                    style={{ marginTop: "10px" }}
+                  />
+                  <textarea
+                    name="deskripsi"
+                    placeholder="Deskripsi kerja sama"
+                    className="custom-input"
+                    rows="4"
+                    required
+                    style={{ marginTop: "10px" }}
+                  />
+                  <input
+                    type="date"
+                    name="tanggal_kerjasama"
+                    className="custom-input"
+                    style={{ marginTop: "10px" }}
+                  />
+                  <label className="file-label" style={{ marginTop: "10px" }}>
+                    <span>Logo Mitra (opsional):</span>
+                    <input
+                      type="file"
+                      name="logo_mitra"
+                      accept="image/*"
+                      className="file-input"
+                    />
+                  </label>
+                  <div className="review-actions" style={{ marginTop: "14px" }}>
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Batal
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn-primary"
+                      disabled={submitting}
+                    >
+                      {submitting ? "Menyimpan..." : "Simpan"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </main>
     </div>
   );
 }

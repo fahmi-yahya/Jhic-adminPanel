@@ -225,6 +225,12 @@ export const DEFAULT_NAV_ITEMS = [
     subItems: [
       { label: "Data Lulusan", path: "/data-lulusan", module: "bkk" },
       { label: "Data Lowongan", path: "/data-lowongan", module: "bkk" },
+      { label: "Data Mitra", path: "/data-mitra", module: "mitra" },
+      {
+        label: "Data Kisah Alumni",
+        path: "/data-kisah-alumni",
+        module: "kisah",
+      },
     ],
   },
   {
@@ -238,9 +244,18 @@ export const DEFAULT_NAV_ITEMS = [
     label: "BLUD",
     icon: BludIcon,
     subItems: [
-      { label: "Data Pesan", path: "/pesan", module: "pesan" },
-      { label: "Data Pencapaian", path: "/data-pencapaian", module: "pencapaian" },
-      { label: "Data Statistik", path: "/data-statistik", module: "statistik" },
+      { label: "Data Pesan", path: "/data-pesan", module: "pesan" },
+      {
+        label: "Data Pencapaian",
+        path: "/data-pencapaian",
+        module: "pencapaian",
+      },
+      {
+        label: "Data Statistik",
+        path: "/data-statistik-blud",
+        module: "statistik",
+      },
+
       {
         label: "Data Produk & Jasa Unggulan",
         path: "/data-produk",

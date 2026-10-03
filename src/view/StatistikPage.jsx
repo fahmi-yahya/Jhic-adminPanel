@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../css/index.css";
 import "../css/admin-modern.css";
-import { apiFetch } from "../lib/api";
+import { apiFetch, getCurrentUser, logout } from "../lib/api";
+import Sidebar from "./Sidebar";
 
 const FIELDS = [
   { key: "jumlah_client", label: "Jumlah Client" },
@@ -17,6 +18,12 @@ export default function StatistikPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
+  const [theme, setTheme] = useState("light");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   useEffect(() => {
     apiFetch("/statistik")
@@ -25,6 +32,27 @@ export default function StatistikPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    getCurrentUser()
+      .then(setCurrentUser)
+      .catch(() => {})
+      .finally(() => setAuthChecked(true));
+  }, []);
+
+  const canView =
+    currentUser?.role === "superadmin" ||
+    !!currentUser?.permissions?.statistik?.view;
+
+  const canEdit =
+    currentUser?.role === "superadmin" ||
+    !!currentUser?.permissions?.statistik?.edit;
+
+  useEffect(() => {
+    if (authChecked && !canView) {
+      window.location.href = "/index";
+    }
+  }, [authChecked, canView]);
+
   function handleChange(key, value) {
     setSaved(false);
     setData((d) => ({ ...d, [key]: value === "" ? "" : Number(value) }));
@@ -32,16 +60,20 @@ export default function StatistikPage() {
 
   async function handleSave(e) {
     e.preventDefault();
+    if (!canEdit) return;
+
     setSaving(true);
     setError("");
     try {
       const payload = Object.fromEntries(
         FIELDS.map((f) => [f.key, Number(data[f.key]) || 0]),
       );
+
       const updated = await apiFetch("/statistik", {
         method: "PUT",
         body: payload,
       });
+
       setData(updated);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
@@ -53,75 +85,99 @@ export default function StatistikPage() {
   }
 
   return (
-    <div className="panel page-modern">
-      <button
-        type="button"
-        className="link-btn back-btn"
-        onClick={() => window.history.back()}
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="m15 18-6-6 6-6" />
-        </svg>
-        Kembali
-      </button>
+    <div className="knowvio-root" data-theme={theme}>
+      <Sidebar
+        activeNav="blud"
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={setSidebarCollapsed}
+        userName={currentUser?.name}
+        role={currentUser?.role}
+        permissions={currentUser?.permissions}
+        onLogoutClick={logout}
+      />
 
-      {error && (
-        <div className="banner-error" role="alert">
-          {error}
-        </div>
-      )}
+      <main className="main">
+        <div className="panel page-modern">
+          <button
+            type="button"
+            className="link-btn back-btn"
+            onClick={() => window.history.back()}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+            Kembali
+          </button>
 
-      <div className="panel-head">
-        <div>
-          <h3>Statistik BLUD</h3>
-          <p>Angka ini yang tampil di kartu statistik landing page.</p>
-        </div>
-      </div>
+          {error && (
+            <div className="banner-error" role="alert">
+              {error}
+            </div>
+          )}
 
-      {loading ? (
-        <p className="empty-row-text">Memuat data...</p>
-      ) : (
-        <form onSubmit={handleSave} style={{ marginTop: "18px" }}>
-          <div className="stats-grid">
-            {FIELDS.map((f) => (
-              <label className="form-group" key={f.key}>
-                <span className="form-label">{f.label}</span>
-                <input
-                  className="form-input"
-                  type="number"
-                  min="0"
-                  value={data?.[f.key] ?? 0}
-                  onChange={(e) => handleChange(f.key, e.target.value)}
-                />
-              </label>
-            ))}
+          <div className="panel-head">
+            <div>
+              <h3>Statistik BLUD</h3>
+              <p>Angka ini yang tampil di kartu statistik landing page.</p>
+            </div>
           </div>
 
-          <div className="review-actions" style={{ marginTop: "18px" }}>
-            {saved && (
-              <span
-                style={{
-                  fontSize: "13px",
-                  color: "var(--am-ok, #1f8a4c)",
-                  alignSelf: "center",
-                }}
-              >
-                Tersimpan.
-              </span>
-            )}
-            <button type="submit" className="btn-primary" disabled={saving}>
-              {saving ? "Menyimpan..." : "Simpan Perubahan"}
-            </button>
-          </div>
-        </form>
-      )}
+          {loading ? (
+            <p className="empty-row-text">Memuat data...</p>
+          ) : (
+            <form onSubmit={handleSave} style={{ marginTop: "18px" }}>
+              <div className="stats-grid">
+                {FIELDS.map((f) => (
+                  <label className="form-group" key={f.key}>
+                    <span className="form-label">{f.label}</span>
+                    <input
+                      className="form-input"
+                      type="number"
+                      min="0"
+                      value={data?.[f.key] ?? 0}
+                      onChange={(e) => handleChange(f.key, e.target.value)}
+                      disabled={!canEdit}
+                    />
+                  </label>
+                ))}
+              </div>
+
+              <div className="review-actions" style={{ marginTop: "18px" }}>
+                {saved && (
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      color: "var(--am-ok, #1f8a4c)",
+                      alignSelf: "center",
+                    }}
+                  >
+                    Tersimpan.
+                  </span>
+                )}
+
+                {canEdit && (
+                  <button
+                    type="submit"
+                    className="btn-primary"
+                    disabled={saving}
+                  >
+                    {saving ? "Menyimpan..." : "Simpan Perubahan"}
+                  </button>
+                )}
+              </div>
+            </form>
+          )}
+        </div>
+      </main>
     </div>
   );
 }
