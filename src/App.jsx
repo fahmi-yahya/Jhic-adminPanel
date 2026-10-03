@@ -13,6 +13,11 @@ import PrestasiPage from "./view/PrestasiPage";
 import LingkunganPage from "./view/LingkunganPage";
 import { User } from "lucide-react";
 import LulusanPage from "./view/DataLulusan";
+import BkkPage from "./view/LowonganPage";
+import FormLowonganBkk from "./view/FormLowongan";
+import StatistikPage from "./view/StatistikPage";
+import ProdukPage from "./view/ProdukPage";
+import PencapaianPage from "./view/PencapaianPage";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -32,6 +37,13 @@ function App() {
           <Route path="/management" element={<UserManagement/>}/>
           {/* Default Redirect */}
           <Route path="/data-lulusan" element={<LulusanPage/>}/>
+
+          <Route path="/data-statistik-bluc" element={<StatistikPage/>}/>
+          <Route path="/data-produk" element={<ProdukPage/>}/>
+          <Route path="/data-pencapaian" element={<PencapaianPage/>}/>
+
+          <Route path="/data-lowongan" element={<BkkPage/>}/>
+          <Route path="/form-lowongan" element={<FormLowonganBkk/>}/>
           <Route
             path="/admin"
             element={<Navigate to="/admin/berita" replace />}

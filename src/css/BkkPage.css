@@ -1,0 +1,95 @@
+/* BkkPage.css — khusus kelas yang dipakai halaman BKK saja.
+   Kelas umum (.panel, .stats-grid, .stat-card, table, .status-pill,
+   .btn-outline, .modal-backdrop, .modal-card, .custom-input, .toolbar,
+   .search, .filter-group/.filter-chip, dst) sudah ada di admin-modern.css,
+   jadi sengaja tidak diulang di sini biar tidak tabrakan. */
+
+.bkk-panel .panel-head {
+  margin-bottom: 2px;
+}
+
+/* ---------------- Badge tipe pekerjaan ---------------- */
+.tipe-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: #eef0f4;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.tipe-full-time {
+  background-color: var(--success-soft);
+  color: var(--success);
+}
+.tipe-part-time {
+  background-color: var(--brand-orange-soft);
+  color: var(--brand-orange);
+}
+.tipe-magang {
+  background-color: #eef2ff;
+  color: #4f46e5;
+}
+.tipe-freelance {
+  background-color: #f3e8ff;
+  color: #9333ea;
+}
+.tipe-kontrak {
+  background-color: var(--warning-soft);
+  color: var(--warning);
+}
+
+/* ---------------- Aksi per baris tabel ---------------- */
+.row-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ---------------- Grid detail pengajuan (modal) ---------------- */
+.bkk-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+  margin-top: 4px;
+}
+.bkk-detail-grid .span-2 {
+  grid-column: span 2;
+}
+.bkk-detail-grid span {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 3px;
+}
+.bkk-detail-grid p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* ---------------- Form group (catatan verifikasi) ---------------- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 560px) {
+  .bkk-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .bkk-detail-grid .span-2 {
+    grid-column: span 1;
+  }
+}

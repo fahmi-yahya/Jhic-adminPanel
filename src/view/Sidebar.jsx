@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../css/index.css";
+import "../css/admin-modern.css";
 import { logout } from "../lib/api";
 // Sesuaikan path import ini kalau lokasi file logo di project-nya beda
 // (file logo sudah disiapkan di /assets/logo-smakensa.png pada output ini).
@@ -192,11 +193,11 @@ function CollapseIcon({ collapsed }) {
 /* ---------------- DEFAULT NAV CONFIG ---------------- */
 // `module` di sini harus sama persis dengan key modul permission di
 // management.jsx (MODULES: dashboard, users, berita, jurusan, lingkungan,
-// prestasi, pesan, produk, bkk, spmb, blud — tiga terakhir baru, tambahin
-// juga ke MODULES/ROLE_TEMPLATES di management.jsx kalau mau role
-// admin/jurusan bisa diberi akses ke bagian ini; superadmin otomatis
-// selalu bisa lihat semuanya). Item/sub-item TANPA `module` tidak pernah
-// disembunyikan karena tidak ada data permission untuk itu.
+// prestasi, pesan, produk, bkk, pencapaian, statistik — sudah ditambahkan
+// ke MODULES/ROLE_TEMPLATES di management.jsx; "spmb" masih placeholder,
+// belum ada halaman/rute-nya. superadmin otomatis selalu bisa lihat
+// semuanya. Item/sub-item TANPA `module` tidak pernah disembunyikan
+// karena tidak ada data permission untuk itu.
 export const DEFAULT_NAV_ITEMS = [
   {
     id: "dashboard",
@@ -222,8 +223,8 @@ export const DEFAULT_NAV_ITEMS = [
     label: "BKK",
     icon: BkkIcon,
     subItems: [
-      { label: "Data Lulusan", path: "/data-lulusan", module: "bkk" }
-    
+      { label: "Data Lulusan", path: "/data-lulusan", module: "bkk" },
+      { label: "Data Lowongan", path: "/data-lowongan", module: "bkk" },
     ],
   },
   {
@@ -236,7 +237,16 @@ export const DEFAULT_NAV_ITEMS = [
     id: "blud",
     label: "BLUD",
     icon: BludIcon,
-    subItems: [{ label: "Data BLUD", path: "/blud", module: "blud" }],
+    subItems: [
+      { label: "Data Pesan", path: "/pesan", module: "pesan" },
+      { label: "Data Pencapaian", path: "/data-pencapaian", module: "pencapaian" },
+      { label: "Data Statistik", path: "/data-statistik", module: "statistik" },
+      {
+        label: "Data Produk & Jasa Unggulan",
+        path: "/data-produk",
+        module: "produk",
+      },
+    ],
   },
   {
     id: "users",

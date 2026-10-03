@@ -234,9 +234,11 @@ const MODULES = [
   { id: "prestasi", label: "Prestasi" },
   { id: "pesan", label: "Pesan" },
   { id: "produk", label: "Produk Unggulan" },
+  { id: "lulusan", label: "Data Lulusan" },
   { id: "bkk", label: "BKK" },
   { id: "spmb", label: "SPMB" },
-  { id: "blud", label: "BLUD" },
+  { id: "pencapaian", label: "Pencapaian & Kerja Sama" },
+  { id: "statistik", label: "Statistik BLUD" },
 ];
 
 const ROLE_TEMPLATES = {
