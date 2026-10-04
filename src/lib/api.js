@@ -1,4 +1,4 @@
-export const API_BASE = "http://localhost:8000/api"; // ganti ke URL production saat deploy
+export const API_BASE = "https://backend.timevali.my.id/api"; // ganti ke URL production saat deploy
 
 export const APP_BASE = API_BASE.replace(/\/api\/?$/, "");
 
