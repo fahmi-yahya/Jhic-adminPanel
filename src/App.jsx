@@ -19,6 +19,7 @@ import StatistikPage from "./view/StatistikPage";
 import ProdukPage from "./view/ProdukPage";
 import PencapaianPage from "./view/PencapaianPage";
 import PesanBludPage from "./view/PesanBludPage";
+import HalamanBkk from "./view/KisahAlumni";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -35,17 +36,18 @@ function App() {
           <Route path="/lingkungan" element={<LingkunganPage />} />
           <Route path="/prestasi" element={<PrestasiPage />} />
           <Route path="/pesan" element={<PesanPage />} />
-          <Route path="/management" element={<UserManagement/>}/>
+          <Route path="/management" element={<UserManagement />} />
           {/* Default Redirect */}
-          <Route path="/data-lulusan" element={<LulusanPage/>}/>
+          <Route path="/data-lulusan" element={<LulusanPage />} />
 
-          <Route path="/data-statistik-blud" element={<StatistikPage/>}/>
-          <Route path="/data-produk" element={<ProdukPage/>}/>
-          <Route path="/data-pencapaian" element={<PencapaianPage/>}/>
-          <Route path="/data-pesan" element={<PesanBludPage/>}/>
+          <Route path="/data-statistik-blud" element={<StatistikPage />} />
+          <Route path="/data-produk" element={<ProdukPage />} />
+          <Route path="/data-pencapaian" element={<PencapaianPage />} />
+          <Route path="/data-pesan" element={<PesanBludPage />} />
+          <Route path="/data-kisah-alumni" element={<HalamanBkk />} />
 
-          <Route path="/data-lowongan" element={<BkkPage/>}/>
-          <Route path="/form-lowongan" element={<FormLowonganBkk/>}/>
+          <Route path="/data-lowongan" element={<BkkPage />} />
+          <Route path="/form-lowongan" element={<FormLowonganBkk />} />
           <Route
             path="/admin"
             element={<Navigate to="/admin/berita" replace />}
